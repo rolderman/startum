@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kibana
+  annotations:
+    cert-manager.io/issuer: zerossl
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-security@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls.options: {{ .Release.Namespace }}-tlsoptions@kubernetescrd
+spec:
+  tls:
+  - secretName: {{ .Values.project }}.kibana.{{ .Values.environment }}
+    hosts:
+    - {{ .Values.project }}.kibana.{{ .Values.environment }}.rolder.app
+  rules:
+  - host: {{ .Values.project }}.kibana.{{ .Values.environment }}.rolder.app
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kibana
+            port:
+              name: kibana

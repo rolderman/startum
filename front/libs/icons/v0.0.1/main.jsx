@@ -1,12 +1,14 @@
 import {
-    IconUsers,
-    IconMessages
+    IconCalendarEvent,
+    IconListDetails,
+    IconChartBar
 } from '@tabler/icons-react'
 
 function GetIcon(iconName) {
     switch (iconName) {
-        case 'IconUsers': return IconUsers
-        case 'IconMessages': return IconMessages
+        case 'CalendarEvent': return IconCalendarEvent
+        case 'ListDetails': return IconListDetails
+        case 'ChartBar': return IconChartBar
     }
 }
 

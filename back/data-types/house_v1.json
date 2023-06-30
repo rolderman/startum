@@ -1,0 +1,16 @@
+{
+    "dynamic": "strict",
+    "properties": {
+        "name": {
+            "type": "text",
+            "fields": {
+                "raw": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "complexId": {
+            "type": "keyword"
+        }
+    }
+}

@@ -1,14 +1,11 @@
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools/build/lib/index.prod.js'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { Notifications } from '@mantine/notifications'
 import { useColorScheme, useShallowEffect, useTimeout } from '@mantine/hooks'
 import { MantineProvider, Center, Loader } from '@mantine/core'
 import Cookies from 'js-cookie'
 import ms from 'ms'
-
-import Ajv from "ajv"
-window.ajv = new Ajv()
 
 import initBackend from './libs/init-backend'
 
@@ -22,8 +19,8 @@ const App = {
 	displayName: "App_v0.0.3",
 	getReactComponent() {
 		return function (props) {
-			const rootRef = useRef()
-			const { backendType = 'kuzzle', project, envVersion, sessionTimeout = '1d' } = props
+			const { backendType = 'kuzzle', project, envVersion, sessionTimeout = '1d', dataTypes } = props
+			dataTypes = dataTypes && dataTypes[0]
 
 			// vaildate and refresh JWT
 			const { start } = useTimeout(() => validateJWT(sessionTimeout, false), ms(sessionTimeout) - 10000)
@@ -63,7 +60,7 @@ const App = {
 				if (props.project && !initialized) {
 					// load libs
 					if (debug > 1) console.time('Initialize performance')
-					window.Rolder = { params: { project, envVersion, backendType, debug, sessionTimeout } }
+					window.Rolder = { params: { project, envVersion, backendType, dataTypes, debug, sessionTimeout } }
 					if (debug > 1) console.log('Rolder:', window.Rolder)
 
 					// init & connect backend
@@ -81,32 +78,29 @@ const App = {
 			if (!props.detectColorScheme) colorScheme = props.colorScheme
 
 			return (
-				<div ref={rootRef}>
-					<MantineProvider
-						withGlobalStyles
-						withNormalizeCSS
-
-						theme={{
-							colorScheme,
-							defaultRadius: 'md',
-							globalStyles: (theme) => ({
-								body: {
-									backgroundColor: colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[0],
-								}
-							}),
-						}
-						}
-					>
-						<Notifications />
-						<QueryClientProvider client={queryClient}>
-							{props.children}
-							{debug > 0 && <ReactQueryDevtools />}
-						</QueryClientProvider>
-						<Center h='100vh'>
-							{!initialized && <Loader size={64} />}
-						</Center>
-					</MantineProvider >
-				</div>
+				<MantineProvider
+					withGlobalStyles
+					withNormalizeCSS
+					theme={{
+						colorScheme,
+						defaultRadius: 'md',
+						globalStyles: (theme) => ({
+							body: {
+								backgroundColor: colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[0],
+							}
+						}),
+					}
+					}
+				>
+					<Notifications />
+					<QueryClientProvider client={queryClient}>
+						{props.children}
+						{debug > 0 && <ReactQueryDevtools />}
+					</QueryClientProvider>
+					<Center h='100vh'>
+						{!initialized && <Loader size={64} />}
+					</Center>
+				</MantineProvider >
 			)
 		}
 	},
@@ -136,6 +130,7 @@ const App = {
 		},
 		envVersion: { type: 'string', displayName: 'Environment version', group: 'Connection', tooltip: "Examples: d2, s2, p3", },
 		project: { type: 'string', displayName: 'Project name', group: 'Connection', tooltip: "Examples: rasko, tex" },
+		dataTypes: { type: 'array', displayName: 'Datatypes schema', group: 'Connection', tooltip: "Examples: [{product: {version: 1}}]" },
 		sessionTimeout: { type: 'string', displayName: 'Session timeout', group: 'Auth', tooltip: "milliseconds lib format: 1m, 3d" },
 		authenticated: { type: 'boolean', displayName: 'Authenticated', group: 'Auth' },
 		detectColorScheme: { type: 'boolean', displayName: 'Autodetect color scheme', group: 'Theme' },
