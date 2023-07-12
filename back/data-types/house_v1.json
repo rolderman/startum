@@ -1,16 +1,35 @@
 {
     "dynamic": "strict",
     "properties": {
-        "name": {
-            "type": "text",
-            "fields": {
-                "raw": {
+        "complex": {
+            "properties": {
+                "id": {
                     "type": "keyword"
                 }
             }
         },
-        "complexId": {
-            "type": "keyword"
+        "data": {
+            "properties": {
+                "name": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"                            
+                        }
+                    }
+                }
+            }
+        },
+        "state": {
+            "properties": {
+                "value": {
+                    "type": "keyword"
+                },
+                "title": {
+                    "type": "keyword"
+                }
+            }
         }
     }
 }

@@ -1,14 +1,15 @@
-import kuzzle from './kuzzle/v0.0.3/main'
+import init from "./kuzzle/v0.0.5/init"
 
-const initBackend = async (backendType, props) => {
-    const { project, envVersion } = props
-    switch (backendType) {        
+const initBackend = async () => {
+    const { backendType, project, envVersion, debug } = window.Rolder.params
+    switch (backendType) {
         case 'kuzzle':
-            const Kuzzle = kuzzle.init({ project, envVersion })
+            const Kuzzle = init({ project, envVersion })
             try {
                 await Kuzzle.connect()
                 window.Kuzzle = Kuzzle
-                if (window.Rolder.params.debug > 0) console.log('Kuzzle initialized: ' + project + '-' + envVersion)
+
+                if (debug > 0) console.log('Kuzzle initialized: ' + project + '-' + envVersion)
             } catch (error) {
                 console.error(error.message)
             }

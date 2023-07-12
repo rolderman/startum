@@ -1,24 +1,24 @@
-import { useRef } from 'react'
-import kuzzle from "../../../../libs/kuzzle/v0.0.3/main"
+import auth from '../../../../libs/kuzzle/v0.0.5/auth'
 import { Paper, Stack, Button, TextInput, PasswordInput, Group } from "@mantine/core"
 import { notifications } from "@mantine/notifications"
 import { useFocusTrap } from "@mantine/hooks"
 import { useForm, isNotEmpty } from "@mantine/form"
 
 function Comp(props) {
-  const rootRef = useRef()
-  const expiresIn = window.Rolder?.params.sessionTimeout
+  const { sessionTimeout } = window.Rolder.params
   const { width } = props
 
   const loginHandler = values => {
     const { login: username, password } = values
-    kuzzle.auth.login({ credentials: { username, password }, expiresIn })
+    auth.login({ credentials: { username, password }, expiresIn: sessionTimeout })
       .then((response) => {
         if (response.error) notifications.show({
           message: response.message,
           color: 'red'
         })
-        else props.authenticated()
+        else {
+          props.authenticated()
+        }
       })
   }
 
@@ -32,7 +32,7 @@ function Comp(props) {
   })
 
   return (
-    <Paper ref={rootRef} shadow="sm" p="md" w={width}>
+    <Paper shadow="sm" p="md" w={width}>
       <form onSubmit={form.onSubmit((values) => loginHandler(values))}>
         <Stack spacing="xs" ref={focusTrapRef}>
           <TextInput label="Логин" withAsterisk {...form.getInputProps('login')} />

@@ -1,0 +1,103 @@
+{
+    "dynamic": "strict",
+    "properties": {
+        "worker": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "area": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "house": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "complex": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "result": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "states": {
+            "properties": {
+                "flow": {
+                    "properties": {
+                        "value": {
+                            "type": "keyword"
+                        },
+                        "title": {
+                            "type": "keyword"
+                        }
+                    }
+                }
+            }
+        },
+        "data": {
+            "properties": {
+                "schedule": {
+                    "properties": {
+                        "type": {
+                            "type": "keyword"
+                        },
+                        "weekdays": {
+                            "type": "byte"
+                        },
+                        "startDate": {
+                            "properties": {
+                                "plan": {
+                                    "type": "date"
+                                },
+                                "fact": {
+                                    "type": "date"
+                                }
+                            }
+                        },
+                        "duration": {
+                            "properties": {
+                                "plan": {
+                                    "type": "short"
+                                },
+                                "fact": {
+                                    "type": "short"
+                                }
+                            }
+                        },
+                        "openTime": {
+                            "type": "short"
+                        },
+                        "liveTime": {
+                            "type": "short"
+                        }
+                    }
+                },
+                "name": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
