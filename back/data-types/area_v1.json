@@ -8,13 +8,6 @@
                 }
             }
         },
-        "complex": {
-            "properties": {
-                "id": {
-                    "type": "keyword"
-                }
-            }
-        },
         "data": {
             "properties": {
                 "name": {
@@ -22,19 +15,9 @@
                     "fields": {
                         "search": {
                             "type": "text",
-                            "analyzer": "russian"                            
+                            "analyzer": "russian"
                         }
                     }
-                }
-            }
-        },
-        "state": {
-            "properties": {
-                "value": {
-                    "type": "keyword"
-                },
-                "title": {
-                    "type": "keyword"
                 }
             }
         }

@@ -11,7 +11,17 @@ window.clone = clone
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+dayjs.extend(isSameOrAfter)
+import weekOfYear from 'dayjs/plugin/weekOfYear'
+dayjs.extend(weekOfYear)
+import advancedFormat from 'dayjs/plugin/advancedFormat'
+dayjs.extend(advancedFormat)
 window.dayjs = dayjs
+
+import { filterBy, setRefs } from './helpers/data/v0.0.2/data'
+window.filterBy = filterBy
+window.setRefs = setRefs
 
 import initBackend from './libs/init-backend'
 import ErrorHandler from './libs/error-handler/v0.0.1/ErrorHandler'
@@ -42,7 +52,7 @@ const App = {
 			const { start } = useTimeout(() => validateJWT(sessionTimeout, false), ms(sessionTimeout) - 10000)
 			const validateJWT = (sessionTimeout, initial) => {
 				const jwtExpireDiff = Cookies.get('jwtExpiresAt') - Date.now()
-				console.log('jwtExpireDiff',jwtExpireDiff)
+				console.log('jwtExpireDiff', jwtExpireDiff)
 				if (jwtExpireDiff > 0) {
 					const jwt = Cookies.get('jwt')
 					Kuzzle.connect()
@@ -56,7 +66,7 @@ const App = {
 								console.log('Saved JWT from cookies to Kuzzle')
 							}
 							// update jwt to keep alive          
-							Kuzzle.auth.refreshToken({ sessionTimeout }).then((response) => {								
+							Kuzzle.auth.refreshToken({ sessionTimeout }).then((response) => {
 								Cookies.set('jwt', response.jwt, { expires: 30 })
 								Cookies.set('jwtExpiresAt', Date.now() + ms(sessionTimeout), { expires: 30 })
 								console.log('JWT refreshed')

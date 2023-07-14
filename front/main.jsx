@@ -4,7 +4,8 @@ import App from './App'
 // organisms
 import AuthNode from './comps/organisms/auth/v0.0.5/main'
 import AppShellNode from './comps/organisms/app-shell/v0.0.4/app-shell'
-import TableNode from './comps/organisms/table/v0.0.2/Table'
+import TableNode from './comps/organisms/table/v0.0.3/Table'
+import TableSNode from './comps/organisms/table-s/v0.0.1/TableS'
 import ETableNode from './comps/organisms/e-table/v0.0.3/ETable'
 import FormNode from './comps/organisms/form/v0.0.4/Form'
 // molecules
@@ -16,6 +17,7 @@ import RadioGroupNode from './comps/molecules/radio-group/v0.0.2/RadioGroup'
 import SwitchGroupNode from './comps/molecules/switch-group/v0.0.1/SwitchGroup'
 import CheckboxGroupNode from './comps/molecules/checkbox-group/v0.0.2/CheckboxGroup'
 import PopoverButtonNode from './comps/molecules/popover-button/v0.0.1/PopoverButton'
+import GridNode from './comps/molecules/grid/v0.0.1/Grid'
 // elements
 import AvatarNode from './comps/elements/data-display/avatar/v0.0.2/Avatar'
 import TextNode from './comps/elements/typography/text/v0.0.2/Text'
@@ -32,6 +34,7 @@ import CheckboxNode from './comps/elements/inputs/checkbox/v0.0.2/Checkbox'
 import ButtonNode from './comps/elements/buttons/button/v0.0.1/Button'
 import TextInputSNode from './comps/elements/inputs/text-input-s/v0.0.1/TextInputS'
 import BadgeNode from './comps/elements/data-display/badge/v0.0.1/Badge'
+import TextInputDebouncedNode from './comps/elements/inputs/text-input-debounced/v0.0.1/TextInputDebounced'
 
 // JS comps
 import { subscribe } from './libs/kuzzle/v0.0.5/subscribe'
@@ -45,12 +48,12 @@ let nodes = [subscribe]
 let reactNodes = [
     App, UseDataFetchNode, UseDataCustomFetch, UseDataMGetNode, UseDataDeleteNode, UseDataMDeleteNode,
     // organisms
-    AuthNode, AppShellNode, FormNode, TableNode, ETableNode,
+    AuthNode, AppShellNode, FormNode, TableNode, ETableNode, TableSNode,
     // molecules
-    FlexNode, StackNode, GroupNode, DrawerNode, RadioGroupNode, SwitchGroupNode, CheckboxGroupNode, PopoverButtonNode,
+    FlexNode, StackNode, GroupNode, DrawerNode, RadioGroupNode, SwitchGroupNode, CheckboxGroupNode, PopoverButtonNode, GridNode,
     // elements
     AvatarNode, TextNode, ActionIconNode, TextInputNode, SelectSNode, SelectNode, AutocompleteNode, MultiSelectSNode,
-    DateTimePickerNode, SliderNode, SegmentedControlNode, CheckboxNode, ButtonNode, TextInputSNode, BadgeNode
+    DateTimePickerNode, SliderNode, SegmentedControlNode, CheckboxNode, ButtonNode, TextInputSNode, BadgeNode, TextInputDebouncedNode
 ]
 
 defineModule({ name: 'rolder-kit', nodes, reactNodes })

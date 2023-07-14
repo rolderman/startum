@@ -1,5 +1,5 @@
 import { getReactNode } from "../../../../../helpers/noodl/v0.0.2/get-react-node"
-import { TextInput } from '@mantine/core'
+import { TextInput, Loader, CloseButton } from '@mantine/core'
 import { useDebouncedValue, useShallowEffect } from '@mantine/hooks'
 import { useState } from 'react'
 import * as Icons from '@tabler/icons-react'
@@ -24,6 +24,12 @@ function Comp(props) {
     <TextInput
       value={value}
       onChange={(event) => setValue(event.currentTarget.value)}
+      rightSection={props.loading
+        ? <Loader size="xs" />
+        : <CloseButton onClick={() => {
+          props.searchEnabled(false)          
+          setValue('')
+        }} />}
       icon={<Icon size={props.iconSize} />}
       {...props}
       {...props.form?.getInputProps(props.formField)}
@@ -37,7 +43,6 @@ const nodeParams = {
   noodlName: 'TextInputDebounced',
   version: '0.0.1',
   fieldsDefName: 'textInputDebounced',
-  propsToCheck: [],
   allowChildren: false,
   Comp
 }

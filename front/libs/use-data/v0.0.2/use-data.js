@@ -14,7 +14,7 @@ function getQueryOptions({ queryKey: [{ command, className, query, ids }] }) {
 
     switch (command) {
         case 'search': queryOptions.enabled = query?.multi_match?.query.length > 0 ? true : false; break
-        case 'customFetch': queryOptions.enabled = Object.keys(query).length > 0 ? true : false; break
+        //case 'customFetch': queryOptions.enabled = Object.keys(query).length > 0 ? true : false; break
         case 'mGet': queryOptions.enabled = ids?.length > 0 ? true : false; break
     }
     if (command !== 'search' && classes[className].subscribe) {

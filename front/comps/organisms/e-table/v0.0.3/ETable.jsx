@@ -1,7 +1,7 @@
 import { getReactNode } from '../../../../helpers/noodl/v0.0.2/get-react-node'
 import { Group, Text, createStyles, MultiSelect, Box, Stack, Button, ActionIcon, Checkbox, Indicator } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
-import { IconChevronUp, IconEdit } from '@tabler/icons-react'
+import { IconChevronDown, IconEdit } from '@tabler/icons-react'
 import { useViewportSize, useElementSize, useShallowEffect, useSetState, } from '@mantine/hooks'
 import { DataTable } from 'mantine-datatable'
 import { useState } from 'react'
@@ -17,11 +17,12 @@ const useStyles = createStyles((theme) => ({
   },
   expandIconRotated: {
     transform: 'rotate(180deg)',
-  }
+  },
 }))
 
+
 function Comp(props) {
-  const { tableScheme, searchEnabled, data, foundedData } = props
+  const { tableScheme, searchEnabled, data, foundedData, filterMaps } = props
 
   const [expandedIds, setExpandedIds] = useSetState(() => {
     const ids = {}
@@ -43,8 +44,8 @@ function Comp(props) {
     setSelectedRecords([])
     props.selectedItems([])
     if (data) {
-      const refs = tableScheme.find(ts => ts.refClasses)?.refClasses || []
-      const dataWithRefs = setRefs(data, refs)
+      const refs = tableScheme.find(ts => ts.refClasses)?.refClasses
+      const dataWithRefs = refs ? setRefs(data, refs) : data
       const filteredData = { ...dataWithRefs }
 
       if (selectedFilters.length) {
@@ -76,22 +77,13 @@ function Comp(props) {
         filteredData = filterBy({
           initialData: filteredData,
           filterByData: foundedData,
-          filterMap: [
-            { filter: 'task', self: ['task'] },
-            { filter: 'task', has: ['area', 'worker'], op: 'append' },
-            { filter: 'house', by: ['task'], data: 'prevStep' },
-            { filter: 'complex', by: ['house'], data: 'prevStep' },
-          ]
+          filterMap: filterMaps[0].search
         })
       } else {
         filteredData = filterBy({
           initialData: dataWithRefs,
           filterByData: filteredData,
-          filterMap: [
-            { filter: 'task', self: ['task'] },
-            { filter: 'house', by: ['task'] },
-            { filter: 'complex', by: ['house'], data: 'prevStep' },
-          ]
+          filterMap: filterMaps[0].data
         })
       }
 
@@ -109,13 +101,23 @@ function Comp(props) {
   }, [data, foundedData, searchEnabled, selectedFilters, selectedData])
 
   // ui
-  const { cx, classes } = useStyles()
+  const { cx, classes, theme } = useStyles()
 
   const ColumnRender = (row, _, accessor, currentTableScheme) => {
     const isFirstColumn = currentTableScheme.columns[0].accessor === accessor
-    const isSecondColumn = currentTableScheme.columns[1].accessor === accessor
+    const isLastColumn = currentTableScheme.level === tableScheme.length - 1
     const expandable = tableScheme[currentTableScheme.level + 1] && isFirstColumn
-    const ml = isSecondColumn && currentTableScheme.level
+    let ml = -0.5
+    const expandWidth = 2.5
+    switch (currentTableScheme.level) {
+      case 1:
+        ml = 0.5
+        if (isLastColumn && !expandable) ml = ml + expandWidth
+        break
+      case 2: ml = 1.75; break
+      case 3: ml = 3; break
+    }
+
     const currentCellProps = currentTableScheme.columns.find(ts => ts.accessor === accessor)
     const formatedValue = ''
     switch (currentCellProps.type) {
@@ -123,9 +125,9 @@ function Comp(props) {
       default: formatedValue = getNestedValue(row, accessor)
     }
 
-    if (expandable) {
+    const Chevron = () => {
       return (
-        <ActionIcon
+        < ActionIcon
           color="dark"
           onClick={() => {
             const eIds = [...expandedIds[currentTableScheme?.className]]
@@ -135,39 +137,41 @@ function Comp(props) {
               eIds.push(row.id)
               setExpandedIds({ [currentTableScheme?.className]: eIds })
             }
-          }}
+          }
+          }
         >
-          <IconChevronUp
+          <IconChevronDown
             size="1rem"
             className={cx(classes.expandIcon, {
               [classes.expandIconRotated]: expandedIds[currentTableScheme.className].includes(row.id),
             })}
           />
-        </ActionIcon>
+        </ActionIcon >
       )
-    } else if (currentTableScheme.level === tableScheme.length - 1 && isSecondColumn) {
+    }
+
+    const Actions = () => {
       return (
-        <Group spacing={4} position="apart" ml={ml + 'rem'}>
-          <Text>{formatedValue}</Text>
-          <Group spacing={4} position="right" noWrap>
-            <ActionIcon
-              color="dark"
-              variant="outline"
-              onClick={(e) => {
-                e.stopPropagation()
-                props.selectedItem(row)
-                props.sendEditItem()
-              }}
-            >
-              <IconEdit size={16} />
-            </ActionIcon>
-          </Group>
-        </Group>
+        <Group spacing={4} position="right" noWrap>
+          <ActionIcon
+            color="dark"
+            variant="outline"
+            onClick={(e) => {
+              e.stopPropagation()
+              props.selectedItem(row)
+              props.sendEditItem()
+            }}
+          >
+            <IconEdit size={16} />
+          </ActionIcon>
+        </Group >
       )
-    } else if (currentTableScheme.level === tableScheme.length - 1 && isFirstColumn) {
+    }
+
+    const Selectable = () => {
       return (
         <Checkbox
-          ml={3}
+          ml={4}
           radius='md'
           color='dark'
           onClick={(e) => e.stopPropagation()}
@@ -185,7 +189,26 @@ function Comp(props) {
           }}
         />
       )
-    } else return <Group ml={ml + 'rem'}><Text>{formatedValue}</Text></Group>
+    }
+
+    if (isFirstColumn) {
+      return (
+        <Group noWrap w='100%'>
+          {currentTableScheme.selectable && <Selectable />}
+          {expandable && <Chevron />}
+          <Group ml={ml + 'rem'} w='100%'>
+            {
+              currentTableScheme.hasActions
+                ? <Group position='apart' noWrap w='100%'>
+                  <Text>{formatedValue}</Text>
+                  <Actions />
+                </Group>
+                : <Text>{formatedValue}</Text>
+            }
+          </Group>
+        </Group>
+      )
+    } else return <Text>{formatedValue}</Text>
   }
 
   function NestedDataTable(parentItem, parentTableScheme, currentTableScheme) {
@@ -224,6 +247,9 @@ function Comp(props) {
       }}
       scrollAreaProps={{ type: 'never' }}
       highlightOnHover={!nextLevelScheme}
+      rowStyle={{
+        backgroundColor: theme.colors.red[nextLevelScheme ? 2 : 1],
+      }}
       {...nestedProps}
     />
   }
@@ -328,6 +354,9 @@ function Comp(props) {
         expanded: { recordIds: expandedIds[tableScheme[0]?.className] },
         content: (parentItem) => (NestedDataTable(parentItem, tableScheme[0], tableScheme[1]))
       }}
+      rowStyle={({ id }) => ({
+        backgroundColor: theme.colors.red[expandedIds[tableScheme[0]?.className].includes(id) && 3]
+      })}
       {...props}
     />
   )

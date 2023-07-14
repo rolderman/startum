@@ -7,6 +7,9 @@ export const comps = {
   group: {
     in: { position: inputs.groupPosition, grow: inputs.grow, spacing: inputs.spacing, ...inputs.margins, ...inputs.dimensions },
   },
+  grid: {
+    in: { ...inputs.margins, gutter: inputs.gutter, spans: inputs.spans },
+  },
   stack: {
     in: { align: inputs.flexAlign, justify: inputs.flexJustify, spacing: inputs.spacing, ...inputs.margins, ...inputs.dimensions },
   },
@@ -120,6 +123,7 @@ export const comps = {
       ...inputs.margins, items: inputs.items, value: inputs.value, orientation: inputs.orientation, ...inputs.form, color: inputs.color, size: inputs.size,
       disabled: inputs.disabled
     },
+    out: { selectedValue: outputs.selectedValue },
     dyn: [{ condition: "useForm = true", inputs: ["formField"] }]
   },
   checkboxGroup: {
@@ -137,8 +141,17 @@ export const comps = {
     in: { ...inputs.margins, ...inputs.eTable, shadow: inputs.shadow, refData: inputs.refData, foundedData: inputs.foundedData, searchEnabled: inputs.searchEnabled },
     out: { selectedItem: outputs.selectedItem, sendViewItem: outputs.sendViewItem, sendEditItem: outputs.sendEditItem, selectedItems: outputs.selectedItems },
   },
+  tableS: {
+    in: { ...inputs.margins, ...inputs.tableS, shadow: inputs.shadow, ...inputs.data },
+    out: { isLoading: outputs.isLoading },
+  },
   table: {
-    in: { ...inputs.margins, ...inputs.table, shadow: inputs.shadow, refData: inputs.refData, foundedData: inputs.foundedData, searchEnabled: inputs.searchEnabled }
+    in: { ...inputs.margins, ...inputs.table },
+    out: { selectedItem: outputs.selectedItem, sendSelected: outputs.sendSelected },
+    dyn: [
+      { condition: 'selectable = true', inputs: ['selectableType'] },
+      { condition: 'selectable = true && selectableType = singleRow', inputs: ['highlightOnHover', 'highlightSelectedRow'] }
+    ],
   },
   appShell: {
     in: { ...inputs.appShell },

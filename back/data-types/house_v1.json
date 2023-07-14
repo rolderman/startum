@@ -20,16 +20,6 @@
                     }
                 }
             }
-        },
-        "state": {
-            "properties": {
-                "value": {
-                    "type": "keyword"
-                },
-                "title": {
-                    "type": "keyword"
-                }
-            }
         }
     }
 }
