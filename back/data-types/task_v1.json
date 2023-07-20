@@ -50,7 +50,7 @@
                 }
             }
         },
-        "data": {
+        "content": {
             "properties": {
                 "schedule": {
                     "properties": {
@@ -94,6 +94,16 @@
                         "search": {
                             "type": "text",
                             "analyzer": "russian"
+                        }
+                    }
+                },
+                "results": {
+                    "properties": {
+                        "id": {
+                            "type": "keyword"
+                        },
+                        "images": {
+                            "type": "binary"
                         }
                     }
                 }

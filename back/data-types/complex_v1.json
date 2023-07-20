@@ -1,7 +1,7 @@
 {
     "dynamic": "strict",
     "properties": {
-        "data": {
+        "content": {
             "properties": {
                 "name": {
                     "type": "keyword",

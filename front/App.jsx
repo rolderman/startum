@@ -1,13 +1,17 @@
 import { useState } from 'react'
 import { Notifications } from '@mantine/notifications'
 import { useColorScheme, useShallowEffect, useTimeout } from '@mantine/hooks'
-import { MantineProvider, Center, Loader } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
 import { DatesProvider } from '@mantine/dates'
+import { enums } from './helpers/noodl/v0.0.2/props'
 import Cookies from 'js-cookie'
 import ms from 'ms'
 
 import clone from 'just-clone'
 window.clone = clone
+
+import mustache from 'mustache'
+window.Mustache = mustache
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
@@ -45,37 +49,32 @@ const App = {
 	displayName: "App_v0.0.4",
 	getReactComponent() {
 		return function (props) {
-			const { backendType = 'kuzzle', project, dbVersion = 1, envVersion, sessionTimeout = '1d', classes: cls } = props
-			cls = cls && cls[0]
+			const { notificationsPosition } = props
+			const { backendType = 'kuzzle', envVersion, project, dbVersion = 1, sessionTimeout = '1d', classes: cls, detectColorScheme, colorScheme: cs } = Noodl.getProjectSettings()
+			cls = cls && JSON.parse(cls)
 
 			// vaildate and refresh JWT
 			const { start } = useTimeout(() => validateJWT(sessionTimeout, false), ms(sessionTimeout) - 10000)
 			const validateJWT = (sessionTimeout, initial) => {
 				const jwtExpireDiff = Cookies.get('jwtExpiresAt') - Date.now()
-				console.log('jwtExpireDiff', jwtExpireDiff)
 				if (jwtExpireDiff > 0) {
 					const jwt = Cookies.get('jwt')
 					Kuzzle.connect()
 					Kuzzle.auth.checkToken(jwt).then((response) => {
 						if (response.valid) {
-							// restore jwt if exist
-							console.log('Cookie JWT is valid')
+							// restore jwt if exist							
 							if (initial) {
 								Kuzzle.jwt = jwt
 								props.jwtValidationSucceed()
-								console.log('Saved JWT from cookies to Kuzzle')
 							}
 							// update jwt to keep alive          
 							Kuzzle.auth.refreshToken({ sessionTimeout }).then((response) => {
 								Cookies.set('jwt', response.jwt, { expires: 30 })
 								Cookies.set('jwtExpiresAt', Date.now() + ms(sessionTimeout), { expires: 30 })
-								console.log('JWT refreshed')
-								console.log('jwtExpiresAt', dayjs(Date.now() + ms(sessionTimeout)).format('YYYY-MM-DD HH:mm'))
 							})
 							// repeat after sessionTimeout - sometime            
 							start()
 						} else {
-							console.log('Cookie JWT is NOT valid')
 							props.jwtValidationFailed()
 						}
 					})
@@ -90,11 +89,16 @@ const App = {
 			// initialization  
 			const [initialized, setInitialized] = useState(false)
 			useShallowEffect(() => {
-				if (props.project && !initialized) {
+				if (project && !initialized) {
 					// load libs
 					if (debug > 1) console.time('Initialize performance')
 					window.Rolder = { params: { project, envVersion, backendType, dbVersion, classes: cls, debug, sessionTimeout } }
 					if (debug > 1) console.log('Rolder:', window.Rolder)
+
+					// data space
+					Noodl.Object.create({
+						id: 'Data'
+					})
 
 					// init & connect backend
 					initBackend()
@@ -105,10 +109,10 @@ const App = {
 							if (debug > 1) console.timeEnd('Initialize performance')
 						})
 				}
-			}, [props.project])
+			}, [project])
 
 			let colorScheme = useColorScheme()
-			if (!props.detectColorScheme) colorScheme = props.colorScheme
+			if (!detectColorScheme) colorScheme = cs
 
 			return (
 				<MantineProvider
@@ -126,14 +130,11 @@ const App = {
 					}
 				>
 					<DatesProvider settings={{ locale: 'ru', firstDayOfWeek: 1 }}>
-						<Notifications />
+						<Notifications position={notificationsPosition} />
 						<QueryClientProvider client={queryClient}>
 							{props.children}
 							{debug > 0 && <ReactQueryDevtools />}
 						</QueryClientProvider>
-						<Center h='100vh'>
-							{!initialized && <Loader size={64} />}
-						</Center>
 					</DatesProvider>
 				</MantineProvider >
 			)
@@ -148,7 +149,7 @@ const App = {
 		},
 	],
 	inputProps: {
-		backendType: {
+		/* backendType: {
 			type: {
 				name: 'enum',
 				enums: [{
@@ -167,9 +168,9 @@ const App = {
 		project: { type: 'string', displayName: 'Project name', group: 'Connection', tooltip: "Examples: rasko, tex" },
 		dbVersion: { type: 'number', displayName: 'Database version', group: 'Connection', default: 1 },
 		classes: { type: 'array', displayName: 'Classes', group: 'Connection', tooltip: "Examples: [{product: {version: 1}}]" },
-		sessionTimeout: { type: 'string', displayName: 'Session timeout', group: 'Auth', tooltip: "milliseconds lib format: 1m, 3d" },
+		sessionTimeout: { type: 'string', displayName: 'Session timeout', group: 'Auth', tooltip: "milliseconds lib format: 1m, 3d" }, */
 		authenticated: { type: 'boolean', displayName: 'Authenticated', group: 'Auth' },
-		detectColorScheme: { type: 'boolean', displayName: 'Autodetect color scheme', group: 'Theme' },
+		/* detectColorScheme: { type: 'boolean', displayName: 'Autodetect color scheme', group: 'Theme' },
 		colorScheme: {
 			type: {
 				name: 'enum',
@@ -184,7 +185,8 @@ const App = {
 			displayName: 'Default color scheme',
 			group: 'Theme',
 			default: 'light',
-		},
+		}, */
+		notificationsPosition: { type: { name: 'enum', enums: enums.notificationsPositions }, displayName: 'Notifications position', group: 'Notifications', default: 'bottom-right' },
 	},
 	outputProps: {
 		jwtValidationFailed: { type: 'signal', displayName: 'JWT validation failed', group: 'Auth' },

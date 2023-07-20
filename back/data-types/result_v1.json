@@ -1,9 +1,18 @@
 {
     "dynamic": "strict",
     "properties": {
-        "data": {
+        "content": {
             "properties": {
                 "name": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                },
+                "description": {
                     "type": "keyword",
                     "fields": {
                         "search": {

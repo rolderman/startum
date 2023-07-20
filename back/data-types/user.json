@@ -1,0 +1,12 @@
+{
+    "role": {
+        "properties": {
+            "title": {
+                "type": "keyword"
+            },
+            "value": {
+                "type": "keyword"
+            }
+        }
+    }
+}

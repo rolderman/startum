@@ -1,9 +1,25 @@
 {
     "dynamic": "strict",
     "properties": {
-        "data": {
+        "user": {
             "properties": {
-                "name": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "content": {
+            "properties": {
+                "firstName": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                },
+                "lastName": {
                     "type": "keyword",
                     "fields": {
                         "search": {

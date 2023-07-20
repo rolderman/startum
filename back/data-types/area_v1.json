@@ -8,7 +8,7 @@
                 }
             }
         },
-        "data": {
+        "content": {
             "properties": {
                 "name": {
                     "type": "keyword",

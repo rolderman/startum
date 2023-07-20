@@ -1,4 +1,4 @@
-const enums = {
+export const enums = {
     sizes: [{ value: 'xs', label: 'xs' }, { value: 'sm', label: 'sm' }, { value: 'md', label: 'md' }, { value: 'lg', label: 'lg' }, { value: 'xl', label: 'xl' }],
     directions: [{ value: 'row', label: 'Row' }, { value: 'column', label: 'Column' }],
     groupPositions: [{ value: 'left', label: 'Left' }, { value: 'center', label: 'Center' }, { value: 'right', label: 'Right' }, { value: 'apart', label: 'Apart' }],
@@ -11,11 +11,22 @@ const enums = {
     variants: [{ value: 'light', label: 'Light' }, { value: 'filled', label: 'Filled' }, { value: 'outline', label: 'Outline' }],
     actionVariants: [{ value: 'transparent', label: 'Transparent' }, { value: 'subtle', label: 'Subtle' }, { value: 'filled', label: 'Filled' }, { value: 'light', label: 'Light' }, { value: 'outline', label: 'Outline' }, { value: 'default', label: 'Default' }],
     fontWeights: [{ value: '600', label: 'Medium' }, { value: '700', label: 'Bold' }],
-    colors: [{ value: 'dark', label: 'Dark' }, { value: 'blue', label: 'Blue' }, { value: 'red', label: 'Red' }],
+    colors: [{ value: 'white', label: 'White' }, { value: 'gray', label: 'Gray' }, { value: 'dark', label: 'Dark' }, { value: 'blue', label: 'Blue' }, { value: 'red', label: 'Red' }],
     opTypes: [{ value: 'create', label: 'Create' }, { value: 'update', label: 'Update' }],
     actionTypes: [{ value: 'submit', label: 'Submit' }],
     wraps: [{ value: 'wrap', label: 'Wrap' }, { value: 'nowrap', label: 'Nowrap' }, { value: 'wrap-reverse', label: 'Wrap reverse' }],
     selectableTypes: [{ value: 'singleRow', label: 'Single row' }, { value: 'multipleRows', label: 'Multiple rows' }, { value: 'singleCell', label: 'Single cell' }],
+    lineVariants: [{ value: 'dashed', label: 'Dashed' }, { value: 'dotted', label: 'Dotted' }],
+    loaderVariants: [{ value: 'bars', label: 'Bars' }, { value: 'dots', label: 'Dots' }],
+    useDataTypes: [{ value: 'fetch', label: 'Fetch' }, { value: 'get', label: 'Get' }, { value: 'mGet', label: 'mGet' }],
+    colorShades: [
+        { value: '0', label: '0' }, { value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3' }, { value: '4', label: '4' }, { value: '5', label: '5' },
+        { value: '6', label: '6' }, { value: '7', label: '7' }, { value: '8', label: '8' }, { value: '9', label: '9' }
+    ],
+    notificationsPositions: [
+        { value: 'top-left', label: 'Top left' }, { value: 'top-right', label: 'Top right' }, { value: 'top-center', label: 'Top center' },
+        { value: 'bottom-left', label: 'Bottom left' }, { value: 'bottom-right', label: 'Bottom right' }, { value: 'bottom-center', label: 'Bottom center' },
+    ],
 }
 const units = {
     c: ['rem', 'px'],
@@ -28,7 +39,10 @@ export const inputs = {
     disabled: { type: 'boolean', displayName: 'Disabled', group: groups.style, default: false },
     direction: { type: { name: 'enum', enums: enums.directions }, displayName: 'Direction', group: groups.layout, default: 'row', },
     orientation: { type: 'boolean', displayName: 'Vertical', group: groups.layout, default: false },
+    lineVariant: { type: { name: 'enum', enums: enums.lineVariants }, displayName: 'Variant', group: groups.style },
     spacing: { type: { name: 'enum', enums: enums.sizes }, default: 'md', displayName: 'Spacing', group: groups.layout },
+    gap: { type: { name: 'enum', enums: enums.sizes }, default: 'md', displayName: 'Gap', group: groups.layout },
+    p: { type: { name: 'enum', enums: enums.sizes }, default: 'md', displayName: 'Padding', group: groups.layout },
     grow: { type: 'boolean', displayName: 'Grow', group: groups.layout, default: false },
     show: { type: 'boolean', displayName: 'Show', group: groups.signals },
     groupPosition: { type: { name: 'enum', enums: enums.groupPositions }, displayName: 'Position', group: groups.layout, default: 'left' },
@@ -38,8 +52,10 @@ export const inputs = {
     flexJustify: { type: { name: 'enum', enums: enums.flexJustifies }, displayName: 'Justify', group: groups.layout, default: 'center' },
     flexJustify2: { type: { name: 'enum', enums: enums.flexJustifies2 }, displayName: 'Justify', group: groups.layout },
     variant: { type: { name: 'enum', enums: enums.variants }, displayName: 'Variant', group: groups.style, default: 'light' },
+    loaderVariant: { type: { name: 'enum', enums: enums.loaderVariants }, displayName: 'Variant', group: groups.style },
     actionVariant: { type: { name: 'enum', enums: enums.actionVariants }, displayName: 'Variant', group: groups.style, default: 'filled' },
     size: { type: { name: 'enum', enums: enums.sizes }, displayName: 'Size', group: groups.dimensions, default: 'md' },
+    sizeString: { type: 'string', displayName: 'Size', group: groups.dimensions, default: 'md' },
     gutter: { type: { name: 'enum', enums: enums.sizes }, displayName: 'Gutter', group: groups.dimensions, default: 'md' },
     radius: { type: { name: 'enum', enums: enums.sizes }, displayName: 'Radius', group: groups.dimensions, default: 'md' },
     shadow: { type: { name: 'enum', enums: enums.sizes }, displayName: 'Shadow', group: groups.style },
@@ -48,6 +64,7 @@ export const inputs = {
     title: { type: 'string', displayName: 'Title', group: groups.style },
     color: { type: { name: 'enum', enums: enums.colors }, displayName: 'Color', group: groups.style },
     iconSize: { type: { name: 'number', units: units.c, defaultUnit: 'rem' }, displayName: 'Icon size', group: groups.dimensions },
+    opacity: { type: 'number', displayName: 'Opacity', group: groups.style },
     iconName: { type: 'string', displayName: 'Icon name', group: groups.style, default: 'Plus', tooltip: 'Find icon at tabler-icons.io and capitalize it: "SuperIconName"' },
     loading: { type: 'boolean', displayName: 'Loading', group: groups.style, default: false },
     placeholder: { type: 'string', displayName: 'Placeholder', group: 'Text', default: 'Placeholder' },
@@ -78,11 +95,47 @@ export const inputs = {
     value: { type: 'any', displayName: 'Value', group: 'Data' },
     id: { type: 'string', displayName: 'Object id', group: 'Data' },
     spans: { type: 'array', displayName: 'Spans', group: 'Data', tooltip: "Example: [4,4,4] One row = 12. Can be number, auor, content" },
+    height: { type: 'string', displayName: 'Height', group: groups.dimensions },
+    withBorder: { type: 'boolean', displayName: 'With borders', group: groups.style, default: false },
+    withCloseButton: { type: 'boolean', displayName: 'With close button', group: groups.style, default: true, tooltip: "Hides close buttin and title" },
+    height: { type: { name: 'number', units: units.h, defaultUnit: 'rem' }, displayName: 'Height', group: groups.dimensions },
+    width: { type: { name: 'number', units: units.w, defaultUnit: 'rem' }, displayName: 'Width', group: groups.dimensions },    
+    sxBackgroundColor: {
+        backgroundColor: { type: { name: 'enum', enums: enums.colors }, displayName: 'Background color', group: groups.style },
+        colorShade: { type: { name: 'enum', enums: enums.colorShades }, displayName: 'Color shade', group: groups.style, default: '6' },
+    },
+    useData: {
+        useDataType: { type: { name: 'enum', enums: enums.useDataTypes }, displayName: 'Type', group: 'UseData', default: 'fetch' },
+        useDataEnabled: { type: 'boolean', displayName: 'Enabled', group: 'UseData', default: false },
+        className: { type: 'string', displayName: 'Classname', group: 'Data' },
+        setRefs: { type: 'boolean', displayName: 'Set references', group: 'Data', default: false, tooltip: "Fill data to reference, if exists at Noodl.Objects.Data" },
+        refMap: { type: 'array', displayName: 'Reference map', group: 'Data', tooltip: "Example: [{product: ['supplier', 'warehouse']}]" },
+        query: { type: 'array', displayName: 'Query', group: 'Params', tooltip: "Example: [{ data.name: { 'ta-da!!!'} }]" },
+        sorts: { type: 'array', displayName: 'Sorts', group: 'Params', tooltip: "Example: [{ data.name: 'asc' }]" },
+        options: { type: 'array', displayName: 'Options', group: 'Params', tooltip: "Example: [{ size: 100 }]" },
+        id: { type: 'string', displayName: 'Object id', group: 'Params' },
+        ids: { type: 'array', displayName: 'Objects Ids', group: 'Params', tooltip: "Example: ['id1', 'id2']" },
+    },
     data: {
         className: { type: 'string', displayName: 'Classname', group: 'Data' },
         query: { type: 'array', displayName: 'Query', group: 'Data', tooltip: "Example: [{ data.name: { 'ta-da!!!'} }]" },
         sorts: { type: 'array', displayName: 'Sorts', group: 'Data', tooltip: "Example: [{ data.name: 'asc' }]" },
         options: { type: 'array', displayName: 'Options', group: 'Data', tooltip: "Example: [{ size: 100 }]" },
+    },
+    formatedValue: {
+        formatValue: { type: 'boolean', displayName: 'Format value', group: 'Value', default: false },
+        value: { type: 'string', displayName: 'Value', group: 'Value'},        
+        template: { type: 'string', displayName: 'Format template', group: 'Value', tooltip: "Example: 'some text {{ content.name }} other text'" },
+        itemId: { type: 'string', displayName: 'Item id', group: 'Value'},        
+    },
+    scrollArea: {
+        bottomOffset: { type: 'number', displayName: 'Bottom offset', group: groups.dimensions },
+    },
+    icon: {
+        size: { type: { name: 'number', units: units.c, defaultUnit: 'rem' }, displayName: 'Size', group: groups.dimensions },
+        name: { type: 'string', displayName: 'Icon name', group: groups.style, default: 'Plus', tooltip: 'Find icon at tabler-icons.io and capitalize it: "SuperIconName"' },
+        stroke: { type: 'number', displayName: 'Stroke', group: groups.style, default: 2 },
+        color: { type: { name: 'enum', enums: enums.colors }, displayName: 'Color', group: groups.style },
     },
     margins: {
         mt: { type: { name: 'enum', enums: enums.sizes }, displayName: 'Margin top', group: groups.layout },
@@ -184,4 +237,5 @@ export const outputs = {
     sendViewItem: { type: 'signal', displayName: 'View item clicked' },
     sendEditItem: { type: 'signal', displayName: 'Edit item clicked' },
     isLoading: { type: 'boolean', displayName: 'Loading', group: 'Data', default: false },
+    sendLoaded: { type: 'signal', displayName: 'Loaded', group: 'Data', },
 }

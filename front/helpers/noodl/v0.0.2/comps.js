@@ -14,7 +14,7 @@ export const comps = {
     in: { align: inputs.flexAlign, justify: inputs.flexJustify, spacing: inputs.spacing, ...inputs.margins, ...inputs.dimensions },
   },
   flex: {
-    in: { align: inputs.flexAlign2, justify: inputs.flexJustify2, gap: inputs.spacing, ...inputs.margins, ...inputs.dimensions, direction: inputs.direction, wrap: inputs.wrap },
+    in: { align: inputs.flexAlign2, justify: inputs.flexJustify2, gap: inputs.gap, opacity: inputs.opacity, ...inputs.margins, ...inputs.dimensions, direction: inputs.direction, wrap: inputs.wrap },
   },
   avatar: {
     in: { variant: inputs.variant, size: inputs.size, radius: inputs.radius, ...inputs.margins, color: inputs.color },
@@ -25,8 +25,21 @@ export const comps = {
       iconName: inputs.iconName, iconSize: inputs.iconSize
     },
   },
+  scrollArea: {
+    in: { ...inputs.scrollArea },
+  },
+  icon: {
+    in: { ...inputs.icon },
+  },
   text: {
-    in: { ...inputs.font, ...inputs.margins, text: inputs.text },
+    in: { ...inputs.font, ...inputs.margins, c: inputs.color, ...inputs.formatedValue, text: inputs.text },
+    dyn: [
+      { condition: "formatValue = false", inputs: ['value'] },
+      { condition: "formatValue = true", inputs: ['template', 'itemId'] }
+    ]
+  },
+  loader: {
+    in: { ...inputs.margins, color: inputs.color, size: inputs.size, variant: inputs.loaderVariant },
   },
   actionIcon: {
     in: {
@@ -42,6 +55,17 @@ export const comps = {
     },
     out: { sendClicked: outputs.sendClicked }
   },
+  button_v_0_0_2: {
+    in: {
+      ...inputs.margins, variant: inputs.actionVariant, size: inputs.size, radius: inputs.radius, color: inputs.color,
+      iconSize: inputs.iconSize, loading: inputs.loading, disabled: inputs.disabled, iconName: inputs.iconName, ...inputs.formatedValue
+    },
+    out: { sendClicked: outputs.sendClicked },
+    dyn: [
+      { condition: "formatValue = false", inputs: ['value'] },
+      { condition: "formatValue = true", inputs: ['template', 'itemId'] }
+    ]
+  },
   popoverButton: {
     in: {
       ...inputs.margins, variant: inputs.actionVariant, size: inputs.size, radius: inputs.radius, color: inputs.color, shadow: inputs.shadow,
@@ -50,7 +74,7 @@ export const comps = {
     out: { sendClicked: outputs.sendClicked }
   },
   drawer: {
-    in: { position: inputs.drawerPosition, drawerTitle: inputs.title, size: inputs.size, show: inputs.show },
+    in: { position: inputs.drawerPosition, drawerTitle: inputs.title, size: inputs.sizeString, show: inputs.show, withCloseButton: inputs.withCloseButton },
     out: { hided: outputs.hided }
   },
   form: {
@@ -86,9 +110,9 @@ export const comps = {
   select: {
     in: {
       items: inputs.items, ...inputs.form, ...inputs.margins, label: inputs.label, placeholder: inputs.placeholder,
-      withAsterisk: inputs.withAsterisk, disabled: inputs.disabled, radius: inputs.radius, value: inputs.value,
+      withAsterisk: inputs.withAsterisk, disabled: inputs.disabled, radius: inputs.radius, value: inputs.value, labelField: inputs.labelField
     },
-    dyn: [{ condition: "useForm = true", inputs: ["formField"] }]
+    dyn: [{ condition: "useForm = true", inputs: ["labelField"] }]
   },
   autocomplete: {
     in: {
@@ -117,6 +141,16 @@ export const comps = {
   radioGroup: {
     in: { ...inputs.margins, items: inputs.items, direction: inputs.direction, ...inputs.form },
     dyn: [{ condition: "useForm = true", inputs: ["formField"] }]
+  },
+  divider: {
+    in: { ...inputs.margins, orientation: inputs.orientation, size: inputs.size, label: inputs.label, variant: inputs.lineVariant }
+  },
+  paper: {
+    in: { ...inputs.margins, shadow: inputs.shadow, radius: inputs.radius, p: inputs.p, withBorder: inputs.withBorder, ...inputs.sxBackgroundColor },
+  },
+  paperButton: {
+    in: { ...inputs.margins, shadow: inputs.shadow, radius: inputs.radius, p: inputs.p, withBorder: inputs.withBorder },
+    out: { sendSelected: outputs.sendSelected }
   },
   segmentedControl: {
     in: {
@@ -162,8 +196,22 @@ export const comps = {
       { condition: 'navbarWidth = true', inputs: ['navbarWidthSm', 'navbarWidthLg'] },
     ],
   },
+  useData: {
+    in: { ...inputs.useData },
+    out: { isLoading: inputs.isLoading, sendLoaded: outputs.sendLoaded },
+    dyn: [
+      { condition: 'setRefs = true', inputs: ['refMap'] },
+      { condition: 'useDataType = fetch', inputs: ['query', 'sorts', 'options'] },
+      { condition: 'useDataType = get', inputs: ['id'] },
+      { condition: 'useDataType = mGet', inputs: ['ids'] },
+    ],
+  },
   useDataFetch: {
     in: { ...inputs.data },
+    out: { data: outputs.data, isLoading: inputs.isLoading }
+  },
+  useDataGet: {
+    in: { className: inputs.data.className, id: inputs.id },
     out: { data: outputs.data, isLoading: inputs.isLoading }
   },
   useDataMGet: {
@@ -178,4 +226,7 @@ export const comps = {
     in: { className: inputs.data.className, ids: inputs.ids, run: inputs.run },
     out: { sendDeleted: outputs.sendDeleted, working: outputs.working }
   },
+  webCamera: {
+    out: { selectedValue: outputs.selectedValue, sendSelected: outputs.sendSelected }
+  }
 }
