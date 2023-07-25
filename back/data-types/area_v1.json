@@ -18,6 +18,15 @@
                             "analyzer": "russian"
                         }
                     }
+                },
+                "description": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
                 }
             }
         }
