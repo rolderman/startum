@@ -15,7 +15,16 @@
                     "fields": {
                         "search": {
                             "type": "text",
-                            "analyzer": "russian"                            
+                            "analyzer": "russian"
+                        }
+                    }
+                },
+                "address": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
                         }
                     }
                 }
