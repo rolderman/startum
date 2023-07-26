@@ -17,7 +17,7 @@ export class Application extends Backend {
   async start() {
     await super.start();
 
-    this.log.info("Application Startum started");
+    this.log.info("Application started");
   }
 }
 
