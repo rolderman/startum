@@ -29,6 +29,13 @@
                     }
                 }
             }
+        },
+        "states": {
+            "properties": {
+                "archived": {
+                    "type": "boolean"
+                }
+            }
         }
     }
 }

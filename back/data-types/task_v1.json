@@ -47,6 +47,9 @@
                             "type": "keyword"
                         }
                     }
+                },
+                "archived": {
+                    "type": "boolean"
                 }
             }
         },
