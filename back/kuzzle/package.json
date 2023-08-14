@@ -23,7 +23,8 @@
   "dependencies": {
     "kuzzle": "2.25.0",
     "kuzzle-plugin-prometheus": "4.2.0",
-    "npm": "9.8.0"
+    "npm": "9.8.0",
+    "dayjs": "1.11.9"
   },
   "devDependencies": {
     "@types/node": "^14.14.37",

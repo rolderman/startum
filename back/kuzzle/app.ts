@@ -1,5 +1,28 @@
-import { Backend } from "kuzzle";
+import { Backend, KDocument, KDocumentContent, KuzzleRequest } from "kuzzle";
 import { PrometheusPlugin } from "kuzzle-plugin-prometheus";
+import dayjs from 'dayjs'
+
+interface Task extends KDocumentContent {
+  states: {
+    flow: {
+      value: string,
+      title: string
+    }
+  },
+  content: {
+    name: string,
+    schedule: {
+      startDate: {
+        plan: string,
+        fact: string
+      },
+      duration: {
+        plan: number,
+        fact: number
+      }
+    }
+  }
+}
 
 export class Application extends Backend {
   private prometheusPlugin = new PrometheusPlugin();
@@ -13,10 +36,35 @@ export class Application extends Backend {
 
     this.plugin.use(this.prometheusPlugin);
 
-    this.pipe.register('document:afterSearch', async (request) => {
-      //request.result.now = (new Date()).toUTCString();
-      this.log.info("pipe collection: " + JSON.stringify(request.input.args.collection));
-      this.log.info("pipe result: " + JSON.stringify(request.result));
+    this.pipe.register('document:afterSearch', async (request: KuzzleRequest) => {
+      const collection = request.input.args.collection
+      const dbClass = collection.split('_')[0]
+      if (dbClass === 'task') {
+        let updateItems = []
+        request.result.hits.forEach((item: KDocument<Task>) => {
+          const { startDate, duration } = item._source.content.schedule
+          const { flow } = item._source.states
+          if (!startDate.fact && flow.value !== 'failed') {
+            const startDateCalcFact = dayjs(startDate.plan).add(duration.plan, 'minute')
+            const diff = dayjs(startDateCalcFact).diff(dayjs())
+            if (diff < 0) {
+              const flow = {
+                value: 'failed',
+                title: 'Провалена'
+              }
+              item._source.states.flow = flow
+              updateItems.push({
+                _id: item._id,
+                body: {
+                  states: { flow }
+                }
+              })
+              this.log.info(`Task '${item._source.content.name}', flow state updated to 'failed'`);
+            }
+          }
+        });
+        this.sdk.document.mUpdate('startum_v1', collection, updateItems, { silent: true })
+      }
       return request;
     });
   }
