@@ -5,6 +5,16 @@
             "properties": {
                 "id": {
                     "type": "keyword"
+                },
+                "password": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "company": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
                 }
             }
         },
@@ -27,6 +37,13 @@
                             "analyzer": "russian"
                         }
                     }
+                }
+            }
+        },
+        "states": {
+            "properties": {
+                "archived": {
+                    "type": "boolean"
                 }
             }
         }

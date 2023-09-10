@@ -1,11 +1,92 @@
 {
     "dynamic": "strict",
     "properties": {
-        "name": {
-            "type": "text",
-            "fields": {
-                "raw": {
-                    "type": "keyword"
+        "content": {
+            "properties": {
+                "name": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                },
+                "contacts": {
+                    "properties": {
+                        "phone": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text",
+                                    "analyzer": "russian"
+                                }
+                            }
+                        },
+                        "email": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text",
+                                    "analyzer": "russian"
+                                }
+                            }
+                        }
+                    }
+                },
+                "legal": {
+                    "properties": {
+                        "name": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text",
+                                    "analyzer": "russian"
+                                }
+                            }
+                        },
+                        "address": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text",
+                                    "analyzer": "russian"
+                                }
+                            }
+                        },
+                        "rs": {
+                            "type": "keyword"
+                        },
+                        "inn": {
+                            "type": "keyword"
+                        },
+                        "ogrn": {
+                            "type": "keyword"
+                        },
+                        "bik": {
+                            "type": "keyword"
+                        },
+                        "ks": {
+                            "type": "keyword"
+                        }
+                    }
+                }
+            }
+        },
+        "states": {
+            "properties": {
+                "flow": {
+                    "properties": {
+                        "value": {
+                            "type": "keyword"
+                        },
+                        "label": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "archived": {
+                    "type": "boolean"
                 }
             }
         }
