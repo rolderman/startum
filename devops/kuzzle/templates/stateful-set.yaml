@@ -1,55 +1,6 @@
 apiVersion: apps/v1
 kind: StatefulSet
-metadata: 
-  name: kuzzle
-  labels:
-    app: kuzzle
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: kuzzle
-  serviceName: kuzzle
-  template:
-    metadata:
-      labels:
-        app: kuzzle
-    spec:      
-      containers:
-        - name: kuzzle
-          image: kuzzleio/kuzzle-runner:{{ .Chart.AppVersion }}
-          command: ["bash", "-c", "npm install && npm run build && node /var/app/app.js"]
-          env:
-            - name: kuzzle_services__storageEngine__client__node
-              value: http://kuzzle-els:9200
-            - name: kuzzle_services__internalCache__node__host
-              value: kuzzle-redis
-            - name: kuzzle_services__memoryStorage__node__host
-              value: kuzzle-redis
-            - name: NODE_ENV
-              value: production
-          ports:
-            - name: kuzzle
-              containerPort: 7512
-          volumeMounts:
-            - name: kuzzle-data
-              mountPath: /var/app
-  volumeClaimTemplates:
-    - metadata:
-        name: kuzzle-data
-        labels:
-          app: kuzzle
-      spec:
-        accessModes:
-          - "ReadWriteOnce"
-        resources:
-          requests:
-            storage: 500Mi
-        storageClassName: longhorn-r2
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata: 
+metadata:
   name: kuzzle-redis
   labels:
     app: kuzzle-redis
@@ -63,11 +14,11 @@ spec:
     metadata:
       labels:
         app: kuzzle-redis
-    spec:      
+    spec:
       containers:
         - name: kuzzle-redis
           image: redis:6
-          command: ["redis-server","--appendonly","yes"]
+          command: ["redis-server", "--appendonly", "yes"]
           ports:
             - name: kuzzle-redis
               containerPort: 6379
@@ -89,7 +40,7 @@ spec:
 ---
 apiVersion: apps/v1
 kind: StatefulSet
-metadata: 
+metadata:
   name: kuzzle-els
   labels:
     app: kuzzle-els
@@ -103,7 +54,7 @@ spec:
     metadata:
       labels:
         app: kuzzle-els
-    spec:      
+    spec:
       containers:
         - name: kuzzle-els
           image: kuzzleio/elasticsearch:7
@@ -114,9 +65,9 @@ spec:
             - name: kuzzle-els-data
               mountPath: /usr/share/elasticsearch/data
       securityContext:
-            fsGroup: 0
-            runAsUser: 1000
-            runAsGroup: 0
+        fsGroup: 0
+        runAsUser: 1000
+        runAsGroup: 0
   volumeClaimTemplates:
     - metadata:
         name: kuzzle-els-data

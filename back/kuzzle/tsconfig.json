@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": ".",
+    "outDir": "dist",
     "lib": ["ES6"],
     "declaration": true,
     "listEmittedFiles": true,
@@ -12,7 +12,7 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "rootDir": ".",
+  "rootDir": "lib/",
   "include": [
     "app.ts",
     "lib/**/*.ts"

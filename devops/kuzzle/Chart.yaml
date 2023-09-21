@@ -4,4 +4,4 @@ type: application
 name: kuzzle
 
 version: 0.0.1
-appVersion: "latest"
+appVersion: "current"
