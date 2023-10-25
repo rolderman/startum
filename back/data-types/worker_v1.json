@@ -5,8 +5,12 @@
             "properties": {
                 "id": {
                     "type": "keyword"
-                },
-                "password": {
+                }
+            }
+        },
+        "company": {
+            "properties": {
+                "id": {
                     "type": "keyword"
                 }
             }

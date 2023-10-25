@@ -4,12 +4,14 @@
 * Установленный Docker Desktop
 * Подключенный кластер Kubernetes
 ## Подготовка образа
+* Указать новую версию kuzzle в package.json, если нужно.
 ```
-docker build -t kuzzle-startum:0.9.0 .
+npm run docker npm install // если первый раз или есть новая верся Kuzzle
+docker build -t kuzzle-startum:8 .
 ```
 Где: 
 * kuzzle-startum - название образа. Должно быть одно для каждого проекта.
-* 0.9.0 - версия. На момент создания совпадает с версией фронта. Должна быть уникальна. При ошибке, нужно удалать образ с yndex Container Registry.
+* 8 - версия. При ошибке, нужно удалать образ с yndex Container Registry.
 ## Загрузка образа
 ```
 yc container registry list # находим id реестра
@@ -18,8 +20,8 @@ yc container registry list # находим id реестра
 +----------------------+--------+----------------------+
 | crpdrnml2dc1034r7bn1 | rolder | b1ggljum7u5ge5bhgln4 |
 +----------------------+--------+----------------------+
-docker tag kuzzle-startum:0.9.0 cr.yandex/crpdrnml2dc1034r7bn1/kuzzle-startum:0.9.0 # присваиваем docker tag, который требует Yandex
-docker push cr.yandex/crpdrnml2dc1034r7bn1/kuzzle-startum:0.9.0 # заливаем образ в Yandex Container Registrty
+docker tag kuzzle-startum:8 cr.yandex/crpdrnml2dc1034r7bn1/kuzzle-startum:8 # присваиваем docker tag, который требует Yandex
+docker push cr.yandex/crpdrnml2dc1034r7bn1/kuzzle-startum:8 # заливаем образ в Yandex Container Registrty
 ```
 * Добавляем путь к образу в Kubernetes.
 ## Аутентификация Kubernetes в Yandex Container Registrty

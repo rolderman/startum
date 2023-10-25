@@ -29,6 +29,13 @@
                     "type": "boolean"
                 }
             }
+        },
+        "company": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
         }
     }
 }

@@ -8,6 +8,13 @@
                 }
             }
         },
+        "company": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
         "content": {
             "properties": {
                 "name": {

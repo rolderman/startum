@@ -11,7 +11,8 @@
         "content": {
             "properties": {
                 "date": {
-                    "type": "date"
+                    "type": "date",
+                    "format": "epoch_millis"
                 },
                 "amount": {
                     "type": "scaled_float",
@@ -22,10 +23,12 @@
                         "date": {
                             "properties": {
                                 "start": {
-                                    "type": "date"
+                                    "type": "date",
+                                    "format": "epoch_millis"
                                 },
                                 "end": {
-                                    "type": "date"
+                                    "type": "date",
+                                    "format": "epoch_millis"
                                 }
                             }
                         },

@@ -27,8 +27,7 @@
                             "type": "keyword",
                             "fields": {
                                 "search": {
-                                    "type": "text",
-                                    "analyzer": "russian"
+                                    "type": "text"
                                 }
                             }
                         }
@@ -76,10 +75,12 @@
                         "date": {
                             "properties": {
                                 "start": {
-                                    "type": "date"
+                                    "type": "date",
+                                    "format": "epoch_millis"
                                 },
                                 "end": {
-                                    "type": "date"
+                                    "type": "date",
+                                    "format": "epoch_millis"
                                 }
                             }
                         },
@@ -114,6 +115,12 @@
                         },
                         "label": {
                             "type": "keyword"
+                        },
+                        "color": {
+                            "type": "keyword"
+                        },
+                        "order": {
+                            "type": "short"
                         }
                     }
                 },
@@ -124,6 +131,12 @@
                         },
                         "label": {
                             "type": "keyword"
+                        },
+                        "color": {
+                            "type": "keyword"
+                        },
+                        "order": {
+                            "type": "short"
                         }
                     }
                 },

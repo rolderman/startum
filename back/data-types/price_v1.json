@@ -3,7 +3,7 @@
     "properties": {
         "content": {
             "properties": {
-                "dayCost": {
+                "dayPrice": {
                     "properties": {
                         "worker": {
                             "type": "scaled_float",
@@ -21,6 +21,13 @@
             "properties": {
                 "archived": {
                     "type": "boolean"
+                }
+            }
+        },
+        "company": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
                 }
             }
         }

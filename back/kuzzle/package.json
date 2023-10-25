@@ -23,7 +23,7 @@
   "dependencies": {
     "dependencies": "^0.0.1",
     "install": "0.13.0",
-    "kuzzle": "2.26.2",
+    "kuzzle": "2.27.1",
     "kuzzle-plugin-prometheus": "^4.1.0"
   },
   "devDependencies": {

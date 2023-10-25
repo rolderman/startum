@@ -12,7 +12,7 @@ interface Company extends KDocumentContent {
         subscription: {
             balance: number
             date: {
-                end: Date
+                end: number
             },
             dayCost: number
         }
@@ -27,11 +27,11 @@ export default function (app: any, collection: string, request: KuzzleRequest) {
             if (item._source.content?.subscription) {
                 const { balance, dayCost, date } = item._source.content?.subscription
 
-                const deysLeftFromNow = dayjs(date.end).endOf('d').diff(dayjs().endOf('d'), 'd')
+                const deysLeftFromNow = dayjs.unix(date.end).endOf('d').diff(dayjs().endOf('d'), 'd')
                 const newBalance: number = deysLeftFromNow * dayCost
 
                 if (newBalance !== balance) {
-                    let newEndDate: Date = dayjs().endOf('d').add(deysLeftFromNow, 'd').toDate()
+                    let newEndDate: number = dayjs().endOf('d').add(deysLeftFromNow, 'd').unix()
                     switch (true) {
                         case deysLeftFromNow > 7: item._source.states.subscription = { value: 'active', label: 'Активна' }; break
                         case deysLeftFromNow <= 7 && deysLeftFromNow > 0: item._source.states.subscription =

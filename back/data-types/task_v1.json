@@ -8,13 +8,6 @@
                 }
             }
         },
-        "area": {
-            "properties": {
-                "id": {
-                    "type": "keyword"
-                }
-            }
-        },
         "house": {
             "properties": {
                 "id": {
@@ -29,7 +22,7 @@
                 }
             }
         },
-        "result": {
+        "company": {
             "properties": {
                 "id": {
                     "type": "keyword"
@@ -43,8 +36,14 @@
                         "value": {
                             "type": "keyword"
                         },
-                        "title": {
+                        "label": {
                             "type": "keyword"
+                        },
+                        "color": {
+                            "type": "keyword"
+                        },
+                        "order": {
+                            "type": "short"
                         }
                     }
                 },
@@ -66,10 +65,12 @@
                         "startDate": {
                             "properties": {
                                 "plan": {
-                                    "type": "date"
+                                    "type": "date",
+                                    "format": "epoch_millis"
                                 },
                                 "fact": {
-                                    "type": "date"
+                                    "type": "date",
+                                    "format": "epoch_millis"
                                 }
                             }
                         },
@@ -83,11 +84,15 @@
                                 }
                             }
                         },
-                        "openTime": {
-                            "type": "short"
-                        },
-                        "liveTime": {
-                            "type": "short"
+                        "time": {
+                            "properties": {
+                                "open": {
+                                    "type": "short"
+                                },
+                                "live": {
+                                    "type": "short"
+                                }
+                            }
                         }
                     }
                 },
@@ -97,16 +102,6 @@
                         "search": {
                             "type": "text",
                             "analyzer": "russian"
-                        }
-                    }
-                },
-                "results": {
-                    "properties": {
-                        "id": {
-                            "type": "keyword"
-                        },
-                        "images": {
-                            "type": "binary"
                         }
                     }
                 }
