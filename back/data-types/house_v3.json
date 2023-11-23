@@ -1,0 +1,55 @@
+{
+    "dynamic": "strict",
+    "properties": {
+        "manager": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "complex": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "company": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "content": {
+            "properties": {
+                "name": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                },
+                "address": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                }
+            }
+        },
+        "states": {
+            "properties": {
+                "archived": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,149 @@
+{
+    "dynamic": "strict",
+    "properties": {
+        "content": {
+            "properties": {
+                "name": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                },
+                "contacts": {
+                    "properties": {
+                        "phone": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text",
+                                    "analyzer": "russian"
+                                }
+                            }
+                        },
+                        "email": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text"
+                                }
+                            }
+                        }
+                    }
+                },
+                "legal": {
+                    "properties": {
+                        "name": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text",
+                                    "analyzer": "russian"
+                                }
+                            }
+                        },
+                        "address": {
+                            "type": "keyword",
+                            "fields": {
+                                "search": {
+                                    "type": "text",
+                                    "analyzer": "russian"
+                                }
+                            }
+                        },
+                        "rs": {
+                            "type": "keyword"
+                        },
+                        "inn": {
+                            "type": "keyword"
+                        },
+                        "ogrn": {
+                            "type": "keyword"
+                        },
+                        "bik": {
+                            "type": "keyword"
+                        },
+                        "ks": {
+                            "type": "keyword"
+                        }
+                    }
+                },
+                "subscription": {
+                    "properties": {
+                        "date": {
+                            "properties": {
+                                "start": {
+                                    "type": "date",
+                                    "format": "epoch_millis"
+                                },
+                                "end": {
+                                    "type": "date",
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        },
+                        "count": {
+                            "properties": {
+                                "worker": {
+                                    "type": "short"
+                                },
+                                "area": {
+                                    "type": "short"
+                                }
+                            }
+                        },
+                        "dayCost": {
+                            "type": "scaled_float",
+                            "scaling_factor": 100
+                        },
+                        "balance": {
+                            "type": "scaled_float",
+                            "scaling_factor": 100
+                        }
+                    }
+                }
+            }
+        },
+        "states": {
+            "properties": {
+                "flow": {
+                    "properties": {
+                        "value": {
+                            "type": "keyword"
+                        },
+                        "label": {
+                            "type": "keyword"
+                        },
+                        "color": {
+                            "type": "keyword"
+                        },
+                        "order": {
+                            "type": "short"
+                        }
+                    }
+                },
+                "subscription": {
+                    "properties": {
+                        "value": {
+                            "type": "keyword"
+                        },
+                        "label": {
+                            "type": "keyword"
+                        },
+                        "color": {
+                            "type": "keyword"
+                        },
+                        "order": {
+                            "type": "short"
+                        }
+                    }
+                },
+                "archived": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

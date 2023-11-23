@@ -31,7 +31,7 @@ export default function (app: any, collection: string, request: KuzzleRequest) {
         const { startDate, duration } = item._source.content.schedule
         const { flow } = item._source.states
         if (!startDate.fact && flow.value !== 'failed') {
-            const startDateCalcFact = dayjs.unix(startDate.plan).add(duration.plan, 'minute')
+            const startDateCalcFact = dayjs(startDate.plan).add(duration.plan, 'minute')
             const diff = dayjs(startDateCalcFact).diff(dayjs())
             if (diff < 0) {
                 const flow = {

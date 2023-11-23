@@ -1,0 +1,19 @@
+{
+    "dynamic": "strict",
+    "properties": {
+        "user": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "content": {
+            "properties": {
+                "firstName": {
+                    "type": "keyword"
+                }
+            }
+        }
+    }
+}

@@ -15,6 +15,13 @@
                 }
             }
         },
+        "manager": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
         "content": {
             "properties": {
                 "firstName": {

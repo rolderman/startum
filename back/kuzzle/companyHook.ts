@@ -1,5 +1,7 @@
 import { KDocumentContent, KuzzleRequest, KDocument } from "kuzzle";
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 interface Company extends KDocumentContent {
     states: {
@@ -27,16 +29,16 @@ export default function (app: any, collection: string, request: KuzzleRequest) {
             if (item._source.content?.subscription) {
                 const { balance, dayCost, date } = item._source.content?.subscription
 
-                const deysLeftFromNow = dayjs.unix(date.end).endOf('d').diff(dayjs().endOf('d'), 'd')
-                const newBalance: number = deysLeftFromNow * dayCost
+                const secondsLeftFromNow = dayjs(date.end).diff(dayjs().utc(), 's')
+                const newBalance: number = secondsLeftFromNow * dayCost / 86400
 
                 if (newBalance !== balance) {
-                    let newEndDate: number = dayjs().endOf('d').add(deysLeftFromNow, 'd').unix()
+                    let newEndDate: number = dayjs().utc().add(secondsLeftFromNow, 's').valueOf()
                     switch (true) {
-                        case deysLeftFromNow > 7: item._source.states.subscription = { value: 'active', label: 'Активна' }; break
-                        case deysLeftFromNow <= 7 && deysLeftFromNow > 0: item._source.states.subscription =
+                        case secondsLeftFromNow > 7 * 86400: item._source.states.subscription = { value: 'active', label: 'Активна' }; break
+                        case secondsLeftFromNow <= 7 * 86400 && secondsLeftFromNow > 0: item._source.states.subscription =
                             { value: 'ending', label: 'Заканчивается' }; break
-                        case deysLeftFromNow <= 0: item._source.states.subscription = { value: 'ended', label: 'Закончилась' }; break
+                        case secondsLeftFromNow <= 0: item._source.states.subscription = { value: 'ended', label: 'Закончилась' }; break
                     }
                     item._source.content.subscription.balance = newBalance
                     item._source.content.subscription.date.end = newEndDate

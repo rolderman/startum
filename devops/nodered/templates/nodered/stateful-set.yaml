@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata: 
+  name: nodered
+  labels:
+    app: nodered
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodered
+  serviceName: nodered
+  template:
+    metadata:
+      labels:
+        app: nodered
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+        - name: nodered
+          image: nodered/node-red:3.1.0-18
+          command: ["node-red", "-v", "$FLOWS", "--settings", "/config/settings.js"]
+          env:
+          - name: TZ
+            value: Asia/Irkutsk
+          ports:
+            - name: nodered
+              containerPort: 1880
+          volumeMounts:
+            - name: nodered-data
+              mountPath: /usr/src/node-red/.node-red
+            - name: nodered-settings
+              mountPath: /config
+              readOnly: true 
+      volumes:
+        - name: nodered-settings
+          configMap:
+            name: nodered-settings
+      imagePullSecrets:
+        - name: yandex-container-registry
+  volumeClaimTemplates:
+    - metadata:
+        name: nodered-data
+        labels:
+          app: nodered
+      spec:
+        accessModes:
+          - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 500Mi
+        storageClassName: longhorn-r2

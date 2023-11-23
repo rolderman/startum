@@ -1,0 +1,70 @@
+{
+    "dynamic": "false",
+    "properties": {
+        "task": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "area": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "result": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "company": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "manager": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "states": {
+            "properties": {
+                "flow": {
+                    "properties": {
+                        "value": {
+                            "type": "keyword"
+                        },
+                        "label": {
+                            "type": "keyword"
+                        },
+                        "color": {
+                            "type": "keyword"
+                        },
+                        "order": {
+                            "type": "short"
+                        }
+                    }
+                },
+                "archived": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "content": {
+            "properties": {
+                "images": {
+                    "type": "keyword"
+                }
+            }
+        }
+    }
+}

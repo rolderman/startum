@@ -1,0 +1,121 @@
+{
+    "dynamic": "false",
+    "properties": {
+        "manager": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "worker": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "house": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "complex": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "company": {
+            "properties": {
+                "id": {
+                    "type": "keyword"
+                }
+            }
+        },
+        "states": {
+            "properties": {
+                "flow": {
+                    "properties": {
+                        "value": {
+                            "type": "keyword"
+                        },
+                        "label": {
+                            "type": "keyword"
+                        },
+                        "color": {
+                            "type": "keyword"
+                        },
+                        "order": {
+                            "type": "short"
+                        }
+                    }
+                },
+                "archived": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "content": {
+            "properties": {
+                "schedule": {
+                    "properties": {
+                        "type": {
+                            "type": "keyword"
+                        },
+                        "urgent": {
+                            "type": "boolean"
+                        },
+                        "weekdays": {
+                            "type": "byte"
+                        },
+                        "startDate": {
+                            "properties": {
+                                "plan": {
+                                    "type": "date",
+                                    "format": "epoch_millis"
+                                },
+                                "fact": {
+                                    "type": "date",
+                                    "format": "epoch_millis"
+                                }
+                            }
+                        },
+                        "duration": {
+                            "properties": {
+                                "plan": {
+                                    "type": "short"
+                                },
+                                "fact": {
+                                    "type": "short"
+                                }
+                            }
+                        },
+                        "time": {
+                            "properties": {
+                                "open": {
+                                    "type": "short"
+                                },
+                                "live": {
+                                    "type": "short"
+                                }
+                            }
+                        }
+                    }
+                },
+                "name": {
+                    "type": "keyword",
+                    "fields": {
+                        "search": {
+                            "type": "text",
+                            "analyzer": "russian"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

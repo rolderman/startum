@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nodered
+  annotations:
+    cert-manager.io/issuer: zerossl
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-security@kubernetescrd
+    traefik.ingress.kubernetes.io/router.tls.options: {{ .Release.Namespace }}-tlsoptions@kubernetescrd
+spec:
+  tls:
+  - secretName: {{ .Values.project }}.nodered.{{ .Values.environment }}
+    hosts:
+    - {{ .Values.project }}.nodered.{{ .Values.environment }}.rolder.app
+  rules:
+  - host: {{ .Values.project }}.nodered.{{ .Values.environment }}.rolder.app
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nodered
+            port:
+              name: nodered
